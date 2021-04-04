@@ -191,9 +191,4 @@ public class DummyShieldingIndividualClientImp implements ShieldingIndividualCli
     return null;
   }
 
-  // **UPDATE**
-  @Override
-  public String getClosestCateringCompany() {
-    return null;
-  }
 }

@@ -21,14 +21,6 @@ public interface SupermarketClientEndpoints {
   public boolean registerSupermarket(String name, String postCode);
 
   // **UPDATE**
-  /**
-  * Returns true if the operation occurred correctl
-  *
-  * @param orderNumber the order number
-  * @param status status of the order for the requested number
-  * @return true if the operation occurred correctly
-  */
-  public boolean updateOrderStatus(int orderNumber, String status);
 
   // **UPDATE2** ADDED METHOD
   /**

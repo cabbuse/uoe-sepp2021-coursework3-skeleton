@@ -4,8 +4,15 @@
 
 package shield;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
 
@@ -317,7 +324,8 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
 
     @Override
     public boolean changeItemQuantityForPickedFoodBox(int itemId, int quantity) {
-        this.foodOrder.conte#.
+        //this.foodOrder.conte#.
+        return false;
     }
 
     @Override
