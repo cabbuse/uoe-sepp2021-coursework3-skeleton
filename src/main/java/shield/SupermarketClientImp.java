@@ -34,6 +34,14 @@ public class SupermarketClientImp implements SupermarketClient {
   }
 
     // **UPDATE**
+  // **UPDATE2** ADDED METHOD
+  @Override
+  public boolean recordSupermarketOrder(String CHI, int orderNumber) {
+    return false;
+  }
+
+  // **UPDATE**
+
     @Override
     public boolean updateOrderStatus(int orderNumber, String status) {
         String request = "/updateOrderStatus?order_id=42&newStatus="+status;

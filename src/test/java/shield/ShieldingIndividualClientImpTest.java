@@ -4,7 +4,6 @@
 
 package shield;
 
-
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,11 +13,13 @@ import java.util.Properties;
 import java.time.LocalDateTime;
 import java.io.InputStream;
 
+import java.util.Random;
+
 /**
  *
  */
 
-public class DummyShieldingIndividualClientTest {
+public class ShieldingIndividualClientImpTest {
   private final static String clientPropsFilename = "client.cfg";
 
   private Properties clientProps;
@@ -42,11 +43,24 @@ public class DummyShieldingIndividualClientTest {
   public void setup() {
     clientProps = loadProperties(clientPropsFilename);
 
-    client = new DummyShieldingIndividualClientImp(clientProps.getProperty("endpoint"));
+    client = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), clientProps.getProperty("dietary_pref"), clientProps.getProperty("boxChoice"));
   }
 
+
   @Test
-  public void testShowFoodBoxes() {
-    assertEquals(client.showFoodBoxes("none").size(), 3);
+  public void testShieldingIndividualNewRegistration() {
+    Random rand = new Random();
+    String chi = String.valueOf(rand.nextInt(10000));
+
+    assertTrue(client.registerShieldingIndividual(chi));
+    assertTrue(client.isRegistered());
+    assertEquals(client.getCHI(), chi);
+  }
+
+  @Test public void abc () {
+      testShieldingIndividualNewRegistration();
+      client.showFoodBoxes("none");
+      client.placeOrder(null);
+      client.getCateringCompanies();
   }
 }

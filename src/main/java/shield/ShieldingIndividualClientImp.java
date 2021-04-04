@@ -4,12 +4,7 @@
 
 package shield;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.*;
+import java.util.Collection;
 import java.time.LocalDateTime;
 
 public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
@@ -164,8 +159,9 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
         return boxIds;
     }
 
+  // **UPDATE2** REMOVED PARAMETER
     @Override
-    public boolean placeOrder(LocalDateTime deliveryDateTime) {
+  public boolean placeOrder() {
 
         showFoodBoxes(dietary_pref);
         pickFoodBox(Integer.parseInt(boxChoice));
@@ -377,10 +373,9 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
         return false;
     }
 
-    @Override
-    public LocalDateTime getDeliveryTimeForOrder(int orderNumber) {
-        return null;
-    }
+  // **UPDATE2** REMOVED METHOD getDeliveryTimeForOrder
+
+  // **UPDATE**
 
     // **UPDATE**
     @Override
