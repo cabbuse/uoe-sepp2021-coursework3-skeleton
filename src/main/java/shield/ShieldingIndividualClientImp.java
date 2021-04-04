@@ -9,10 +9,8 @@ import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
 
@@ -20,8 +18,10 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
     private String CHI = null;
     private FoodBox foodOrder;
     private String dietary_pref;
-    private String Order_id = null;
     private String boxChoice;
+    private List<FoodBox> BoxesShown = new ArrayList<FoodBox>();
+
+    private Map<String, FoodBox> placedOrders = new HashMap<String, FoodBox>();
 
 
     private class Order {
@@ -98,7 +98,7 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
     }
 
 
-    public ShieldingIndividualClientImp(String endpoint, String dietary_pref,  String boxChoice) {
+    public ShieldingIndividualClientImp(String endpoint, String dietary_pref, String boxChoice) {
         this.endpoint = endpoint;
         this.dietary_pref = dietary_pref;
         this.boxChoice = boxChoice;
@@ -141,7 +141,8 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
             // unmarshal response
             //foodBoxes = new Gson().fromJson(response, foodBoxes.getClass().get);
 
-            Type listType = new TypeToken<List<FoodBox>>() {} .getType();
+            Type listType = new TypeToken<List<FoodBox>>() {
+            }.getType();
             foodBoxes = new Gson().fromJson(response, listType);
 
         } catch (Exception e) {
@@ -158,26 +159,47 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
 
         List<FoodBox> responseBoxes = this.getFoodBoxes(dietaryPreference);
         List<String> boxIds = new ArrayList<String>();
+        boolean found = false;
+        if (BoxesShown.size() == 0) {
+            BoxesShown.addAll(responseBoxes);
+        } else {
+            for (FoodBox x : responseBoxes) {
+                if (found == true){
+                    break;
+                }
+                found = false;
+                for (FoodBox y : BoxesShown) {
+                    if (y.id == x.id) {
+                        found = true;
+                        break;
+                    } else {
+                        BoxesShown.add(x);
+                    }
+
+
+                }
+            }
+        }
 
         for (FoodBox x : responseBoxes) {
             boxIds.add(String.valueOf(Math.round(x.id)));
         }
-
         return boxIds;
     }
 
-  // **UPDATE2** REMOVED PARAMETER
+    // **UPDATE2** REMOVED PARAMETER
     @Override
-  public boolean placeOrder() {
+    public boolean placeOrder() {
 
-        showFoodBoxes(dietary_pref);
         pickFoodBox(Integer.parseInt(boxChoice));
         String order_made = new Gson().toJson(foodOrder);
-        try{
-            String request = "/placeOrder?individual_id="+CHI;
-            String response = ClientIO.doPOSTRequest(endpoint+request, order_made);
-            this.Order_id = response;
-            int i  = 0;
+
+        try {
+            String request = "/placeOrder?individual_id=" + CHI;
+            String response = ClientIO.doPOSTRequest(endpoint + request, order_made);
+
+            this.placedOrders.put(response, foodOrder);
+            int i = 0;
             return true;
         } catch (IOException e) {
             e.printStackTrace();
@@ -277,7 +299,13 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
 
     @Override
     public String getDietaryPreferenceForFoodBox(int foodBoxId) {
-        return String.valueOf(foodOrder.diet);
+        String diet = null;
+        for (int i = 0; i < BoxesShown.size(); i++) {
+            if (BoxesShown.get(i).id == foodBoxId) {
+                diet = BoxesShown.get(i).diet;
+            }
+        }
+        return diet;
     }
 
     @Override
@@ -287,15 +315,22 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
 
     @Override
     public Collection<Integer> getItemIdsForFoodBox(int foodboxId) {
-        return null;
+        Collection<Integer> itemIds = null;
+        for (int i = 0; i < BoxesShown.size(); i++) {
+            for (int j = 0; j < BoxesShown.get(i).contents.size(); j++) {
+                //itemIds.add(BoxesShown.get(i).contents.get(j));
+            }
+        }
+        return itemIds;
+
 
     }
 
     @Override
     public String getItemNameForFoodBox(int itemId, int foodBoxId) {
         String itemName = null;
-        for (int i = 0; i<foodOrder.contents.size(); i++){
-            if (itemId == foodOrder.contents.get(i).id){
+        for (int i = 0; i < foodOrder.contents.size(); i++) {
+            if (itemId == foodOrder.contents.get(i).id) {
                 itemName = foodOrder.contents.get(i).name;
             }
         }
@@ -305,8 +340,8 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
     @Override
     public int getItemQuantityForFoodBox(int itemId, int foodBoxId) {
         int quantity = 0;
-        for (int i = 0; i<foodOrder.contents.size(); i++){
-            if (itemId == foodOrder.contents.get(i).id){
+        for (int i = 0; i < foodOrder.contents.size(); i++) {
+            if (itemId == foodOrder.contents.get(i).id) {
                 quantity = foodOrder.contents.get(i).quantity;
             }
         }
@@ -324,8 +359,12 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
 
     @Override
     public boolean changeItemQuantityForPickedFoodBox(int itemId, int quantity) {
-        //this.foodOrder.conte#.
-        return false;
+        for (int i = 0; i < foodOrder.contents.size(); i++) {
+            if (itemId == foodOrder.contents.get(i).id) {
+                this.foodOrder.contents.get(i).quantity = quantity;
+            }
+        }
+        return true;
     }
 
     @Override
@@ -381,9 +420,9 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
         return false;
     }
 
-  // **UPDATE2** REMOVED METHOD getDeliveryTimeForOrder
+    // **UPDATE2** REMOVED METHOD getDeliveryTimeForOrder
 
-  // **UPDATE**
+    // **UPDATE**
 
     // **UPDATE**
     @Override
