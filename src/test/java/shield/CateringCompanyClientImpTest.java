@@ -19,11 +19,11 @@ import java.util.Random;
  *
  */
 
-public class SupermarketClientTest {
+public class CateringCompanyClientImpTest {
   private final static String clientPropsFilename = "client.cfg";
 
   private Properties clientProps;
-  private SupermarketClient client;
+  private CateringCompanyClient client;
 
   private Properties loadProperties(String propsFilename) {
     ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -43,17 +43,17 @@ public class SupermarketClientTest {
   public void setup() {
     clientProps = loadProperties(clientPropsFilename);
 
-    client = new SupermarketClientImp(clientProps.getProperty("endpoint"));
+    client = new CateringCompanyClientImp(clientProps.getProperty("endpoint"));
   }
 
 
   @Test
-  public void testSupermarketNewRegistration() {
+  public void testCateringCompanyNewRegistration() {
     Random rand = new Random();
     String name = String.valueOf(rand.nextInt(10000));
     String postCode = String.valueOf(rand.nextInt(10000));
 
-    assertTrue(client.registerSupermarket(name, postCode));
+    assertTrue(client.registerCateringCompany(name, postCode));
     assertTrue(client.isRegistered());
     assertEquals(client.getName(), name);
   }
