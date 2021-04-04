@@ -8,6 +8,7 @@
 package shield;
 
 import java.util.Collection;
+import java.time.LocalDateTime;
 
 public interface ShieldingIndividualClient extends ShieldingIndividualClientEndpoints {
   /**
@@ -39,7 +40,6 @@ public interface ShieldingIndividualClient extends ShieldingIndividualClientEndp
   */
   public String getDietaryPreferenceForFoodBox(int foodBoxId);
 
-  // **UPDATE2** COMMENT ONLY
   /**
   * Returns the number of items in this specific food box.
   *

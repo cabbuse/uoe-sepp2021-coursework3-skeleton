@@ -60,7 +60,7 @@ public class ShieldingIndividualClientImpTest {
   @Test public void abc () {
       testShieldingIndividualNewRegistration();
       client.showFoodBoxes("none");
-      client.placeOrder(null);
+      client.placeOrder();
       client.getCateringCompanies();
   }
 }
