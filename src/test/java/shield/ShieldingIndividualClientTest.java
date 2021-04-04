@@ -43,7 +43,7 @@ public class ShieldingIndividualClientTest {
   public void setup() {
     clientProps = loadProperties(clientPropsFilename);
 
-    client = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"));
+    client = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), clientProps.getProperty("dietary_pref"), clientProps.getProperty("boxChoice"));
   }
 
 
@@ -55,5 +55,12 @@ public class ShieldingIndividualClientTest {
     assertTrue(client.registerShieldingIndividual(chi));
     assertTrue(client.isRegistered());
     assertEquals(client.getCHI(), chi);
+  }
+
+  @Test public void abc () {
+      testShieldingIndividualNewRegistration();
+      client.showFoodBoxes("none");
+      client.placeOrder(null);
+      client.getCateringCompanies();
   }
 }
