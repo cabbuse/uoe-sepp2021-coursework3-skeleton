@@ -5,8 +5,6 @@
 package shield;
 
 import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Collection;
 import java.util.Properties;
@@ -14,6 +12,8 @@ import java.time.LocalDateTime;
 import java.io.InputStream;
 
 import java.util.Random;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  *
@@ -23,7 +23,7 @@ public class SupermarketClientImpTest {
   private final static String clientPropsFilename = "client.cfg";
 
   private Properties clientProps;
-  private SupermarketClient client;
+  private SupermarketClientImp client;
 
   private Properties loadProperties(String propsFilename) {
     ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -43,7 +43,7 @@ public class SupermarketClientImpTest {
   public void setup() {
     clientProps = loadProperties(clientPropsFilename);
 
-    client = new SupermarketClientImp(clientProps.getProperty("endpoint"));
+    client = new SupermarketClientImp(clientProps.getProperty("endpoint"),clientProps.getProperty("name"),clientProps.getProperty("postcode"),clientProps.getProperty("orderN"));
   }
 
 
@@ -57,4 +57,36 @@ public class SupermarketClientImpTest {
     assertTrue(client.isRegistered());
     assertEquals(client.getName(), name);
   }
+  @Test
+  public void testSupermarketOrder(){
+      Random rand = new Random();
+      String chi = String.valueOf(rand.nextInt(10000));
+      int orderNo = rand.nextInt(10000);
+      ShieldingIndividualClientImp test_shield = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), clientProps.getProperty("dietary_pref"), clientProps.getProperty("boxChoice"), (String) clientProps.get("changes"));
+      test_shield.registerShieldingIndividual(chi);
+      assertTrue(client.registerSupermarket(client.getName(), client.getPostCode()));
+      assertTrue(client.isRegistered());
+      assertTrue(client.recordSupermarketOrder(chi,orderNo));
+  }
+
+
+  @Test
+  public void testUpdateOrder(){
+      Random rand = new Random();
+      String chi = String.valueOf(rand.nextInt(10000));
+      int orderNo = rand.nextInt(10000);
+      ShieldingIndividualClientImp test_shield = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), clientProps.getProperty("dietary_pref"), clientProps.getProperty("boxChoice"), (String) clientProps.get("changes"));
+      test_shield.registerShieldingIndividual(chi);
+      assertTrue(client.registerSupermarket(client.getName(), client.getPostCode()));
+      assertTrue(client.isRegistered());
+      assertTrue(client.recordSupermarketOrder(chi,orderNo));
+      assertTrue(client.updateOrderStatus(Integer.parseInt(client.getOrder_id()),"packed"));
+      assertTrue(client.updateOrderStatus(Integer.parseInt(client.getOrder_id()),"dispatched"));
+      assertTrue(client.updateOrderStatus(Integer.parseInt(client.getOrder_id()),"delivered"));
+      assertFalse(client.updateOrderStatus(Integer.parseInt(client.getOrder_id()),"abc123"));
+
+  }
+
 }
+
+
