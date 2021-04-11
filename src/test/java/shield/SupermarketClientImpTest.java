@@ -67,6 +67,7 @@ public class SupermarketClientImpTest {
       assertTrue(client.registerSupermarket(client.getName(), client.getPostCode()));
       assertTrue(client.isRegistered());
       assertTrue(client.recordSupermarketOrder(chi,orderNo));
+      assertFalse(client.recordSupermarketOrder("99999",99999));
   }
 
 
@@ -80,10 +81,10 @@ public class SupermarketClientImpTest {
       assertTrue(client.registerSupermarket(client.getName(), client.getPostCode()));
       assertTrue(client.isRegistered());
       assertTrue(client.recordSupermarketOrder(chi,orderNo));
-      assertTrue(client.updateOrderStatus(Integer.parseInt(client.getOrder_id()),"packed"));
-      assertTrue(client.updateOrderStatus(Integer.parseInt(client.getOrder_id()),"dispatched"));
-      assertTrue(client.updateOrderStatus(Integer.parseInt(client.getOrder_id()),"delivered"));
-      assertFalse(client.updateOrderStatus(Integer.parseInt(client.getOrder_id()),"abc123"));
+      client.updateOrderStatus(Integer.parseInt(client.getOrderN()), "dispatched");
+      assertFalse(client.updateOrderStatus(Integer.parseInt(client.getOrderN()),"packed"));
+      assertTrue(client.updateOrderStatus(Integer.parseInt(client.getOrderN()),"delivered"));
+      assertFalse(client.updateOrderStatus(Integer.parseInt(client.getOrderN()),"abc123"));
 
   }
 

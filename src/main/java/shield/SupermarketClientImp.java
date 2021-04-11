@@ -9,13 +9,18 @@ import java.util.ArrayList;
 
 public class SupermarketClientImp implements SupermarketClient {
 
-    private final String name;
-    private final String postcode;
-    private final String orderN;
+    private String name;
+    private String postcode;
+
+    public String getOrderN() {
+        return orderN;
+    }
+
+    private String orderN;
     private String endpoint;
     private boolean registered;
     private ArrayList<String> ordersMade = new ArrayList<String>();
-    private String order_id;
+
 
     public SupermarketClientImp(String endpoint, String name, String postcode, String orderN) {
         this.endpoint = endpoint;
@@ -37,7 +42,8 @@ public class SupermarketClientImp implements SupermarketClient {
             String response = ClientIO.doGETRequest(endpoint + request);
             System.out.println(response);
             this.registered = true;
-            this.order_id = response;
+            this.name =   name;
+            this.postcode = postCode;
 
             return true;
         } catch (IOException e) {
@@ -62,9 +68,13 @@ public class SupermarketClientImp implements SupermarketClient {
         String request = "/recordSupermarketOrder?individual_id="+CHI+"&order_number="+orderNumber+"&supermarket_business_name="+ this.name +"&supermarket_postcode="+this.postcode;
         try{
             String response = ClientIO.doGETRequest(endpoint+request);
-            this.order_id = response;
-            this.ordersMade.add(response);
-            return true;
+            if (response.equals("True")) {
+                this.orderN = String.valueOf(orderNumber);
+                this.ordersMade.add(response);
+                return true;
+            }else{
+                return false;
+            }
 
 
         } catch (IOException e) {
@@ -127,7 +137,5 @@ public class SupermarketClientImp implements SupermarketClient {
     return this.postcode;
   }
 
-  public String getOrder_id(){
-        return this.order_id;
-  }
+
 }
