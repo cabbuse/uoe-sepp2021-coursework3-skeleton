@@ -336,6 +336,9 @@ public class ShieldingIndividualClientImpTest {
         Object[] bx1 = client.getItemIdsForFoodBox(1).toArray();
         Object[] bx2 = client.getItemIdsForFoodBox(3).toArray();
         Object[] bx3 = client.getItemIdsForFoodBox(4).toArray();
+
+        assertEquals(client.getItemIdsForFoodBox(333).size(),0);
+
         Object[] eq1 = {1,2,6};
         Object[] eq2 = {3,4,8};
         Object[] eq3 = {13,11,8,9};
@@ -352,6 +355,7 @@ public class ShieldingIndividualClientImpTest {
 
         }
 
+
     }
 
     @Test
@@ -363,7 +367,35 @@ public class ShieldingIndividualClientImpTest {
             client.placeOrder();
         }
 
+        assertEquals(client.getItemsNumberForFoodBox(1),3);
+        assertEquals(client.getItemsNumberForFoodBox(3),3);
+        assertEquals(client.getItemsNumberForFoodBox(4),4);
+        assertEquals(client.getItemsNumberForFoodBox(999),0);
+        assertEquals(client.getItemsNumberForFoodBox(-4),0);
 
+
+
+
+    }
+
+    @Test
+    public void getDietaryPreferenceForFoodBox(){
+        Random rand = new Random();
+        for (int i = 0; i < 5; i++) {
+            String chi = String.valueOf(rand.nextInt(10000));
+            client.registerShieldingIndividual(chi);
+            client.placeOrder();
+        }
+
+        assertEquals(client.getDietaryPreferenceForFoodBox(3),"none");
+        assertEquals(client.getDietaryPreferenceForFoodBox(1),"none");
+        assertEquals(client.getDietaryPreferenceForFoodBox(4),"none");
+        //although this food box exists test should fail as user shouldn't be able
+        // to place an order for an unseen box
+        assertEquals(client.getDietaryPreferenceForFoodBox(2),null);
+
+        assertEquals(client.getDietaryPreferenceForFoodBox(333),null);
+        assertEquals(client.getDietaryPreferenceForFoodBox(-1),null);
 
 
 

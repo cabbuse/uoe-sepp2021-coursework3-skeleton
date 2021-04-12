@@ -531,6 +531,10 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
                 }
             }
         }
+        if (itemIds.size() == 0){
+            Collection<Integer> itemIdsF = new ArrayList<>();
+            return itemIdsF;
+        }
         return itemIds;
 
 
