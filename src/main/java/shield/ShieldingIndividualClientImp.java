@@ -176,7 +176,7 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
 
                 return true;
             } catch (IOException ex) {
-                ex.printStackTrace();
+                return false;
             }
 
         }
@@ -206,7 +206,7 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
             foodBoxes = new Gson().fromJson(response, listType);
 
         } catch (Exception e) {
-            e.printStackTrace();
+            return  foodBoxes;
         }
 
 
@@ -283,18 +283,18 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
             try {
                 String request = "/placeOrder?individual_id=" + CHI + "&catering_business_name=" + catererName + "&catering_postcode=" + catererPostcode;
                 String response = ClientIO.doPOSTRequest(endpoint + request, order_made);
-                this.OrderNo = response;
                 this.placedOrders.put(response, foodOrder);
+                this.OrderNo = response;
                 return true;
             } catch (IOException e) {
-                e.printStackTrace();
+                return false;
             }
         } else {
             return false;
         }
 
 
-        return false;
+
     }
 
     @Override
@@ -326,11 +326,11 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
                 return false;
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
 
 
-        return false;
+
     }
 
     @Override
@@ -354,13 +354,13 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
                     return false;
                 }
             } catch (IOException e) {
-                e.printStackTrace();
+                return false;
             }
         } else {
             return false;
         }
 
-        return false;
+
     }
 
     @Override
@@ -412,9 +412,9 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
             responses = new Gson().fromJson(recall, listType);
             return responses;
         } catch (IOException e) {
-            e.printStackTrace();
+            return responses;
         }
-        return responses;
+
     }
 
     // **UPDATE**
@@ -438,10 +438,10 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
             return res;
 
         } catch (IOException e) {
-            e.printStackTrace();
+            return 0;
         }
 
-        return 0;
+
     }
 
     @Override
@@ -523,11 +523,11 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
      * @return all itemIds for supplied foodbox id or null if id does not match any food box
      */
     public Collection<Integer> getItemIdsForFoodBox(int foodboxId) {
-        Collection<Integer> itemIds = null;
+        Collection<Integer> itemIds = new ArrayList<>();
         for (int i = 0; i < BoxesShown.size(); i++) {
             for (int j = 0; j < BoxesShown.get(i).contents.size(); j++) {
-                if ((BoxesShown.get(i).id) == foodboxId) {
-                    itemIds.add(BoxesShown.get(i).contents.get(j).id);
+                if ((BoxesShown.get(i).id) == foodboxId ) {
+                    itemIds.add(BoxesShown.get(i).contents.get(j).id.intValue());
                 }
             }
         }
@@ -548,8 +548,9 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
         String itemName = null;
         for (int i = 0; i < BoxesShown.size(); i++) {
             for (int j = 0; j < BoxesShown.get(i).contents.size(); j++) {
-                if ((BoxesShown.get(i).id) == foodBoxId) {
+                if ((BoxesShown.get(i).id) == foodBoxId & BoxesShown.get(i).contents.get(j).id == itemId) {
                     itemName = BoxesShown.get(i).contents.get(j).name;
+                    return itemName;
                 }
             }
         }
@@ -568,8 +569,9 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
         int quantity = 0;
         for (int i = 0; i < BoxesShown.size(); i++) {
             for (int j = 0; j < BoxesShown.get(i).contents.size(); j++) {
-                if ((BoxesShown.get(i).id) == foodBoxId) {
+                if ((BoxesShown.get(i).id) == foodBoxId & BoxesShown.get(i).contents.get(j).id == itemId) {
                     quantity = BoxesShown.get(i).contents.get(j).quantity;
+                    return quantity;
                 }
             }
         }
@@ -585,14 +587,16 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
      */
     public boolean pickFoodBox(int foodBoxId) {
 
+
         List<FoodBox> foodBoxList = this.getFoodBoxes(dietary_pref);
-        FoodBox order_chosen = foodBoxList.get(foodBoxId);
-        foodOrder = order_chosen;
-        if (foodOrder == null) {
-            return false;
-        } else {
-            return true;
+        for (int i = 0 ; i < foodBoxList.size(); i++){
+            if (foodBoxId == foodBoxList.get(i).id){
+                FoodBox order_chosen = foodBoxList.get(i);
+                foodOrder = order_chosen;
+                return true;
+            }
         }
+        return false;
     }
 
     @Override
@@ -663,9 +667,9 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            return null;
         }
-        return null;
+
     }
 
     @Override
@@ -677,6 +681,9 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
      */
     public Collection<Integer> getItemIdsForOrder(int orderNumber) {
         FoodBox current = this.placedOrders.get(String.valueOf(orderNumber));
+        if (current == null){
+            return null;
+        }
         Collection<Integer> itemIDs = new ArrayList<Integer>();
         for (int i = 0; i < current.contents.size(); i++) {
             itemIDs.add(current.contents.get(i).id);
@@ -695,6 +702,9 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
     public String getItemNameForOrder(int itemId, int orderNumber) {
         FoodBox current = this.placedOrders.get(String.valueOf(orderNumber));
         String itemName = null;
+        if (current == null){
+            return null;
+        }
         for (int i = 0; i < current.contents.size(); i++) {
             if (current.contents.get(i).id.equals(itemId)) {
                 itemName = current.contents.get(i).name;
@@ -712,7 +722,10 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
      * @return integer of quantity of unique item type requested
      */
     public int getItemQuantityForOrder(int itemId, int orderNumber) {
-        FoodBox current = this.placedOrders.get(orderNumber);
+        FoodBox current = this.placedOrders.get(String.valueOf(orderNumber));
+        if (current == null){
+            return 0;
+        }
         int itemQuant = 0;
         for (int i = 0; i < current.contents.size(); i++) {
             if (current.contents.get(i).id.equals(itemId)) {
@@ -728,11 +741,14 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
      * and unique item id and quantity
      */
     public boolean setItemQuantityForOrder(int itemId, int orderNumber, int quantity) {
-        FoodBox current = this.placedOrders.get(orderNumber);
+        FoodBox current = this.placedOrders.get(String.valueOf(orderNumber));
+        if (current == null){
+            return false;
+        }
         for (int i = 0; i < current.contents.size(); i++) {
             if (current.contents.get(i).id.equals(itemId)) {
-                if (quantity <= this.placedOrders.get(orderNumber).contents.get(i).quantity) {
-                    this.placedOrders.get(orderNumber).contents.get(i).quantity = quantity;
+                if (quantity <= this.placedOrders.get(String.valueOf(orderNumber)).contents.get(i).quantity) {
+                    this.placedOrders.get(String.valueOf(orderNumber)).contents.get(i).quantity = quantity;
                     return true;
                 }
             }

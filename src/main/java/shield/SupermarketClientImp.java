@@ -47,10 +47,11 @@ public class SupermarketClientImp implements SupermarketClient {
 
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            this.registered = false;
+            return false;
+            //e.printStackTrace();
         }
-        this.registered = false;
-        return false;
+
   }
 
     // **UPDATE**
@@ -78,9 +79,9 @@ public class SupermarketClientImp implements SupermarketClient {
 
 
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
-      return false;
+
   }
 
   // **UPDATE**
@@ -105,9 +106,9 @@ public class SupermarketClientImp implements SupermarketClient {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
-        return false;
+
     }
 
     @Override

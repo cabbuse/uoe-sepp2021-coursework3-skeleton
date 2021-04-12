@@ -47,10 +47,11 @@ public class CateringCompanyClientImp implements CateringCompanyClient {
             //}
             return true;
         } catch (IOException e) {
-            e.printStackTrace();
+            this.registered = false;
+            return false;
         }
-        this.registered = false;
-        return false;
+
+
 
     }
 
@@ -74,9 +75,9 @@ public class CateringCompanyClientImp implements CateringCompanyClient {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            return false;
         }
-        return false;
+
   }
 
     @Override
