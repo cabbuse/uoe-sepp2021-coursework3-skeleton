@@ -138,7 +138,7 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
 
     }
 
-    public ShieldingIndividualClientImp(String endpoint, String dietary_pref, String boxChoice, String changes) {
+    public ShieldingIndividualClientImp(String endpoint, String dietary_pref, String boxChoice, String changes, String changes2) {
         this.endpoint = endpoint;
         this.dietary_pref = dietary_pref;
         this.boxChoice = boxChoice;

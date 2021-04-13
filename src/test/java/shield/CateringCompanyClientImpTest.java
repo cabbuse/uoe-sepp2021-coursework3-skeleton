@@ -9,7 +9,6 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
-import java.time.LocalDateTime;
 import java.io.InputStream;
 
 import java.util.Random;
@@ -68,7 +67,7 @@ public class CateringCompanyClientImpTest {
       Random rand = new Random();
       String chi = String.valueOf(rand.nextInt(10000));
       testCateringCompanyNewRegistration();
-      ShieldingIndividualClientImp test = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), clientProps.getProperty("dietary_pref"), clientProps.getProperty("boxChoice"), (String) clientProps.get("changes"));
+      ShieldingIndividualClientImp test = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), clientProps.getProperty("dietary_pref"), clientProps.getProperty("boxChoice"), (String) clientProps.get("changes"), (String) clientProps.getProperty("changes2"));
 
       for (int i = 0 ; i <ordersize ; i++){
           test.registerShieldingIndividual(chi);

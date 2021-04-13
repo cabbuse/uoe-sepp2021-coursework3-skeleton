@@ -25,6 +25,10 @@ public class ShieldingIndividualClientImpTest {
 
   private Properties clientProps;
   private ShieldingIndividualClientImp client;
+  private ShieldingIndividualClientImp client2;
+  private ShieldingIndividualClientImp client3;
+
+
 
   private Properties loadProperties(String propsFilename) {
     ClassLoader loader = Thread.currentThread().getContextClassLoader();
@@ -44,7 +48,9 @@ public class ShieldingIndividualClientImpTest {
   public void setup() {
     clientProps = loadProperties(clientPropsFilename);
 
-    client = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), clientProps.getProperty("dietary_pref"), clientProps.getProperty("boxChoice"), (String) clientProps.get("changes"));
+    client = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), clientProps.getProperty("dietary_pref"), clientProps.getProperty("boxChoice"), (String) clientProps.get("changes"), (String) clientProps.getProperty("changes2"));
+    client2 = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), "vegan", String.valueOf(5), (String) clientProps.get("changes"), (String) clientProps.getProperty("changes2"));
+    client3 = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), "pollotarian", clientProps.getProperty("boxChoice"), (String) clientProps.get("changes"), (String) clientProps.getProperty("changes2"));
   }
 
 
@@ -70,6 +76,13 @@ public class ShieldingIndividualClientImpTest {
       assertEquals(client.showFoodBoxes("pollotarian").size(), 1);
       assertTrue(client.placeOrder());
 
+      chi = String.valueOf(rand.nextInt(10000));
+      assertTrue(client2.registerShieldingIndividual(chi));
+      assertTrue(client2.isRegistered());
+      assertEquals(client2.getCHI(), chi);
+      assertEquals(client2.showFoodBoxes(client2.getDietary_pref()).size(), 1 );
+      assertTrue(client2.placeOrder());
+
   }
 
   @Test
@@ -89,6 +102,18 @@ public class ShieldingIndividualClientImpTest {
       orders = (ArrayList<Integer>) client.getOrderNumbers();
       assertTrue(client.editOrder(Integer.parseInt(client.getOrderNo())));
 
+
+
+      chi = String.valueOf(rand.nextInt(10000));
+      assertTrue(client2.registerShieldingIndividual(chi));
+      assertTrue(client2.isRegistered());
+      assertEquals(client2.getCHI(), chi);
+      assertEquals(client2.showFoodBoxes(client2.getDietary_pref()).size(), 1 );
+      assertEquals(client2.showFoodBoxes("pollotarian").size(), 1);
+      assertTrue(client2.placeOrder());
+      ArrayList<Integer> orders2 = new ArrayList<>();
+      orders2 = (ArrayList<Integer>) client2.getOrderNumbers();
+      assertTrue(client2.editOrder(Integer.parseInt(client2.getOrderNo())));
   }
 
   @Test
@@ -104,6 +129,15 @@ public class ShieldingIndividualClientImpTest {
       assertEquals(client.showFoodBoxes("pollotarian").size(), 1);
       assertTrue(client.placeOrder());
       assertTrue(client.cancelOrder(Integer.parseInt(client.getOrderNo())));
+
+      chi = String.valueOf(rand.nextInt(10000));
+      assertTrue(client2.registerShieldingIndividual(chi));
+      assertTrue(client2.isRegistered());
+      assertEquals(client2.getCHI(), chi);
+      assertEquals(client2.showFoodBoxes(client2.getDietary_pref()).size(), 1 );
+      assertEquals(client2.showFoodBoxes("pollotarian").size(), 1);
+      assertTrue(client2.placeOrder());
+      assertTrue(client2.cancelOrder(Integer.parseInt(client2.getOrderNo())));
   }
 
 
@@ -122,6 +156,16 @@ public class ShieldingIndividualClientImpTest {
         assertEquals(client.showFoodBoxes("pollotarian").size(), 1);
         assertTrue(client.placeOrder());
         assertTrue(client.requestOrderStatus(Integer.parseInt(client.getOrderNo())));
+
+        chi = String.valueOf(rand.nextInt(10000));
+        assertTrue(client2.registerShieldingIndividual(chi));
+        assertTrue(client2.isRegistered());
+        assertEquals(client2.getCHI(), chi);
+        assertEquals(client2.showFoodBoxes(client2.getDietary_pref()).size(), 1 );
+        assertEquals(client2.showFoodBoxes("vegan").size(), 1 );
+        assertEquals(client2.showFoodBoxes("pollotarian").size(), 1);
+        assertTrue(client2.placeOrder());
+        assertTrue(client2.requestOrderStatus(Integer.parseInt(client2.getOrderNo())));
 
     }
 
