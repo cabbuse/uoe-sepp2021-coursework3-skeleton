@@ -6,13 +6,10 @@ package shield;
 
 import org.junit.jupiter.api.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Properties;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.time.LocalDateTime;
 import java.io.InputStream;
-
-import java.util.Random;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -183,20 +180,20 @@ public class ShieldingIndividualClientImpTest {
         assertTrue(client.placeOrder());
         assertTrue(client.requestOrderStatus(Integer.parseInt(client.getOrderNo())));
 
-        chi = String.valueOf(rand.nextInt(10000));
-        assertTrue(client2.registerShieldingIndividual(chi));
+      String chi1 = String.valueOf(rand.nextInt(10000));
+        assertTrue(client2.registerShieldingIndividual(chi1));
         assertTrue(client2.isRegistered());
-        assertEquals(client2.getCHI(), chi);
+        assertEquals(client2.getCHI(), chi1);
         assertEquals(client2.showFoodBoxes(client2.getDietary_pref()).size(), 1 );
         assertEquals(client2.showFoodBoxes("vegan").size(), 1 );
         assertEquals(client2.showFoodBoxes("pollotarian").size(), 1);
         assertTrue(client2.placeOrder());
         assertTrue(client2.requestOrderStatus(Integer.parseInt(client2.getOrderNo())));
 
-      chi = String.valueOf(rand.nextInt(10000));
-      assertTrue(client3.registerShieldingIndividual(chi));
+      String chi2 = String.valueOf(rand.nextInt(10000));
+      assertTrue(client3.registerShieldingIndividual(chi2));
       assertTrue(client3.isRegistered());
-      assertEquals(client3.getCHI(), chi);
+      assertEquals(client3.getCHI(), chi2);
       assertEquals(client3.showFoodBoxes(client3.getDietary_pref()).size(), 1 );
       assertEquals(client3.showFoodBoxes("vegan").size(), 1 );
       assertEquals(client3.showFoodBoxes("pollotarian").size(), 1);
@@ -315,7 +312,8 @@ public class ShieldingIndividualClientImpTest {
         }
 
         Object[] ordns = client.getOrderNumbers().toArray();
-        for (int i = 0; i<ordns.length-1; i++){
+        Arrays.sort(ordns);
+        for (int i = 0; i<ordns.length-2; i++){
             assertEquals(ordns[i+1], Integer.parseInt(String.valueOf(ordns[i]))+1);
         }
 
@@ -476,6 +474,20 @@ public class ShieldingIndividualClientImpTest {
 
         assertEquals(client.getDietaryPreferenceForFoodBox(333),null);
         assertEquals(client.getDietaryPreferenceForFoodBox(-1),null);
+
+        for (int i = 0; i < 5; i++) {
+            String chi = String.valueOf(rand.nextInt(10000));
+            client2.registerShieldingIndividual(chi);
+            client2.placeOrder();
+        }
+
+        assertEquals(client2.getDietaryPreferenceForFoodBox(5),"vegan");
+        //although this food box exists test should fail as user shouldn't be able
+        // to place an order for an unseen box
+        assertEquals(client2.getDietaryPreferenceForFoodBox(3),null);
+
+        assertEquals(client2.getDietaryPreferenceForFoodBox(333),null);
+        assertEquals(client2.getDietaryPreferenceForFoodBox(-1),null);
 
 
 
