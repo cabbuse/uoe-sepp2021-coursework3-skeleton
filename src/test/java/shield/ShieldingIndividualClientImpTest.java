@@ -74,17 +74,17 @@ public class ShieldingIndividualClientImpTest {
       assertEquals(client.showFoodBoxes("pollotarian").size(), 1);
       assertTrue(client.placeOrder());
 
-      chi = String.valueOf(rand.nextInt(10000));
-      assertTrue(client2.registerShieldingIndividual(chi));
+      String chi1 = String.valueOf(rand.nextInt(10000));
+      assertTrue(client2.registerShieldingIndividual(chi1));
       assertTrue(client2.isRegistered());
-      assertEquals(client2.getCHI(), chi);
+      assertEquals(client2.getCHI(), chi1);
       assertEquals(client2.showFoodBoxes(client2.getDietary_pref()).size(), 1 );
       assertTrue(client2.placeOrder());
 
-      chi = String.valueOf(rand.nextInt(10000));
-      assertTrue(client3.registerShieldingIndividual(chi));
+      String chi2 = String.valueOf(rand.nextInt(10000));
+      assertTrue(client3.registerShieldingIndividual(chi2));
       assertTrue(client3.isRegistered());
-      assertEquals(client3.getCHI(), chi);
+      assertEquals(client3.getCHI(), chi2);
       assertEquals(client3.showFoodBoxes(client3.getDietary_pref()).size(), 1 );
       assertTrue(client3.placeOrder());
 
@@ -108,11 +108,10 @@ public class ShieldingIndividualClientImpTest {
       assertTrue(client.editOrder(Integer.parseInt(client.getOrderNo())));
 
 
-
-      chi = String.valueOf(rand.nextInt(10000));
-      assertTrue(client2.registerShieldingIndividual(chi));
+      String chi1 = String.valueOf(rand.nextInt(10000));
+      assertTrue(client2.registerShieldingIndividual(chi1));
       assertTrue(client2.isRegistered());
-      assertEquals(client2.getCHI(), chi);
+      assertEquals(client2.getCHI(), chi1);
       assertEquals(client2.showFoodBoxes(client2.getDietary_pref()).size(), 1 );
       assertEquals(client2.showFoodBoxes("pollotarian").size(), 1);
       assertTrue(client2.placeOrder());
@@ -120,10 +119,10 @@ public class ShieldingIndividualClientImpTest {
       orders2 = (ArrayList<Integer>) client2.getOrderNumbers();
       assertTrue(client2.editOrder(Integer.parseInt(client2.getOrderNo())));
 
-      chi = String.valueOf(rand.nextInt(10000));
-      assertTrue(client3.registerShieldingIndividual(chi));
+      String chi2 = String.valueOf(rand.nextInt(10000));
+      assertTrue(client3.registerShieldingIndividual(chi2));
       assertTrue(client3.isRegistered());
-      assertEquals(client3.getCHI(), chi);
+      assertEquals(client3.getCHI(), chi2);
       assertEquals(client3.showFoodBoxes(client3.getDietary_pref()).size(), 1 );
       assertEquals(client3.showFoodBoxes("pollotarian").size(), 1);
       assertTrue(client3.placeOrder());
