@@ -48,9 +48,10 @@ public class ShieldingIndividualClientImpTest {
   public void setup() {
     clientProps = loadProperties(clientPropsFilename);
 
+
     client = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), clientProps.getProperty("dietary_pref"), clientProps.getProperty("boxChoice"), (String) clientProps.get("changes"), (String) clientProps.getProperty("changes2"));
-    client2 = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), "vegan", String.valueOf(5), (String) clientProps.get("changes"), (String) clientProps.getProperty("changes2"));
-    client3 = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), "pollotarian", clientProps.getProperty("boxChoice"), (String) clientProps.get("changes"), (String) clientProps.getProperty("changes2"));
+    client2 = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), "vegan", String.valueOf(5), (String) clientProps.get("changes2"), (String) clientProps.getProperty("changes2"));
+    client3 = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), "pollotarian", String.valueOf(2), (String) clientProps.get("changes3"), (String) clientProps.getProperty("changes2"));
   }
 
 
@@ -83,6 +84,13 @@ public class ShieldingIndividualClientImpTest {
       assertEquals(client2.showFoodBoxes(client2.getDietary_pref()).size(), 1 );
       assertTrue(client2.placeOrder());
 
+      chi = String.valueOf(rand.nextInt(10000));
+      assertTrue(client3.registerShieldingIndividual(chi));
+      assertTrue(client3.isRegistered());
+      assertEquals(client3.getCHI(), chi);
+      assertEquals(client3.showFoodBoxes(client3.getDietary_pref()).size(), 1 );
+      assertTrue(client3.placeOrder());
+
   }
 
   @Test
@@ -114,6 +122,15 @@ public class ShieldingIndividualClientImpTest {
       ArrayList<Integer> orders2 = new ArrayList<>();
       orders2 = (ArrayList<Integer>) client2.getOrderNumbers();
       assertTrue(client2.editOrder(Integer.parseInt(client2.getOrderNo())));
+
+      chi = String.valueOf(rand.nextInt(10000));
+      assertTrue(client3.registerShieldingIndividual(chi));
+      assertTrue(client3.isRegistered());
+      assertEquals(client3.getCHI(), chi);
+      assertEquals(client3.showFoodBoxes(client3.getDietary_pref()).size(), 1 );
+      assertEquals(client3.showFoodBoxes("pollotarian").size(), 1);
+      assertTrue(client3.placeOrder());
+      assertTrue(client3.editOrder(Integer.parseInt(client3.getOrderNo())));
   }
 
   @Test
@@ -138,6 +155,15 @@ public class ShieldingIndividualClientImpTest {
       assertEquals(client2.showFoodBoxes("pollotarian").size(), 1);
       assertTrue(client2.placeOrder());
       assertTrue(client2.cancelOrder(Integer.parseInt(client2.getOrderNo())));
+
+      chi = String.valueOf(rand.nextInt(10000));
+      assertTrue(client3.registerShieldingIndividual(chi));
+      assertTrue(client3.isRegistered());
+      assertEquals(client3.getCHI(), chi);
+      assertEquals(client3.showFoodBoxes(client3.getDietary_pref()).size(), 1 );
+      assertEquals(client3.showFoodBoxes("pollotarian").size(), 1);
+      assertTrue(client3.placeOrder());
+      assertTrue(client3.cancelOrder(Integer.parseInt(client3.getOrderNo())));
   }
 
 
@@ -166,6 +192,16 @@ public class ShieldingIndividualClientImpTest {
         assertEquals(client2.showFoodBoxes("pollotarian").size(), 1);
         assertTrue(client2.placeOrder());
         assertTrue(client2.requestOrderStatus(Integer.parseInt(client2.getOrderNo())));
+
+      chi = String.valueOf(rand.nextInt(10000));
+      assertTrue(client3.registerShieldingIndividual(chi));
+      assertTrue(client3.isRegistered());
+      assertEquals(client3.getCHI(), chi);
+      assertEquals(client3.showFoodBoxes(client3.getDietary_pref()).size(), 1 );
+      assertEquals(client3.showFoodBoxes("vegan").size(), 1 );
+      assertEquals(client3.showFoodBoxes("pollotarian").size(), 1);
+      assertTrue(client3.placeOrder());
+      assertTrue(client3.requestOrderStatus(Integer.parseInt(client3.getOrderNo())));
 
     }
 
@@ -228,7 +264,7 @@ public class ShieldingIndividualClientImpTest {
         }
         Object[] ids = (client.getItemIdsForOrder(Integer.parseInt(client.getOrderNo()))).toArray();
         assertEquals(client.getItemNameForOrder(9999,999),null);
-        assertEquals(client.getItemNameForOrder(Integer.parseInt(ids[0].toString()),Integer.parseInt(client.getOrderNo())),"onions");
+        assertEquals(client.getItemNameForOrder(Integer.parseInt(ids[0].toString()),Integer.parseInt(client.getOrderNo())),"cucumbers");
 
     }
 
@@ -243,7 +279,7 @@ public class ShieldingIndividualClientImpTest {
             client.registerShieldingIndividual(chi);
             client.placeOrder();
         }
-        Object[] eq = {3,4,8};
+        Object[] eq = {1,2,6};
         Object[] comp = client.getItemIdsForOrder(Integer.parseInt(client.getOrderNo())).toArray();
         assertEquals(client.getItemIdsForOrder(Integer.parseInt(client.getOrderNo())).toArray().length, eq.length);
         assertEquals(client.getItemIdsForOrder(999999),null);
