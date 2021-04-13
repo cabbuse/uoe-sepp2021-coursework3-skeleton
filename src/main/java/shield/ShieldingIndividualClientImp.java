@@ -168,6 +168,9 @@ public class ShieldingIndividualClientImp implements ShieldingIndividualClient {
 
             try {
                 String response = ClientIO.doGETRequest(endpoint + request);
+                if (response.equals("already registered")){
+                    return false;
+                }
                 Type listType = new TypeToken<List<String>>() {
                 }.getType();
                 info = new Gson().fromJson(response, listType);

@@ -24,6 +24,7 @@ public class ShieldingIndividualClientImpTest {
   private ShieldingIndividualClientImp client;
   private ShieldingIndividualClientImp client2;
   private ShieldingIndividualClientImp client3;
+  private Random rand = new Random();
 
 
 
@@ -49,12 +50,12 @@ public class ShieldingIndividualClientImpTest {
     client = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), clientProps.getProperty("dietary_pref"), clientProps.getProperty("boxChoice"), (String) clientProps.get("changes"), (String) clientProps.getProperty("changes2"));
     client2 = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), "vegan", String.valueOf(5), (String) clientProps.get("changes2"), (String) clientProps.getProperty("changes2"));
     client3 = new ShieldingIndividualClientImp(clientProps.getProperty("endpoint"), "pollotarian", String.valueOf(2), (String) clientProps.get("changes3"), (String) clientProps.getProperty("changes2"));
+
   }
 
 
   @Test
   public void testShieldingIndividualNewRegistration() {
-    Random rand = new Random();
     String chi = String.valueOf(rand.nextInt(10000));
 
     assertTrue(client.registerShieldingIndividual(chi));
@@ -63,7 +64,7 @@ public class ShieldingIndividualClientImpTest {
   }
 
   @Test public void placeOrder () {
-      Random rand = new Random();
+
       String chi = String.valueOf(rand.nextInt(10000));
 
       assertTrue(client.registerShieldingIndividual(chi));
@@ -93,7 +94,7 @@ public class ShieldingIndividualClientImpTest {
   @Test
   public void editOrder(){
 
-      Random rand = new Random();
+
       String chi = String.valueOf(rand.nextInt(10000));
 
       assertTrue(client.registerShieldingIndividual(chi));
@@ -131,7 +132,7 @@ public class ShieldingIndividualClientImpTest {
 
   @Test
   public void cancelOrder(){
-      Random rand = new Random();
+
       String chi = String.valueOf(rand.nextInt(10000));
 
       assertTrue(client.registerShieldingIndividual(chi));
@@ -167,7 +168,7 @@ public class ShieldingIndividualClientImpTest {
 
   @Test
   public void requestStatus(){
-        Random rand = new Random();
+
         String chi = String.valueOf(rand.nextInt(10000));
 
         assertTrue(client.registerShieldingIndividual(chi));
@@ -208,7 +209,7 @@ public class ShieldingIndividualClientImpTest {
      */
 
     public void testGetClosestCat(){
-        Random rand = new Random();
+
         String chi = String.valueOf(rand.nextInt(10000));
 
         assertTrue(client.registerShieldingIndividual(chi));
@@ -218,7 +219,7 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void testSetOrderQuant(){
-        Random rand = new Random();
+
 
         for (int i = 0; i<5; i++){
             String chi = String.valueOf(rand.nextInt(10000));
@@ -234,10 +235,10 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void testGetItemQuant(){
-        Random rand = new Random();
+
 
         for (int i = 0; i<5; i++) {
-            String chi = String.valueOf(rand.nextInt(10000));
+            String chi = String.valueOf(rand.nextInt(10000000));
             client.registerShieldingIndividual(chi);
             client.placeOrder();
         }
@@ -251,7 +252,7 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void getItemNameforOrder(){
-        Random rand = new Random();
+
 
         for (int i = 0; i<5; i++) {
             String chi = String.valueOf(rand.nextInt(10000));
@@ -268,7 +269,7 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void getItemIDSforOrder(){
-        Random rand = new Random();
+
 
         for (int i = 0; i<5; i++) {
             String chi = String.valueOf(rand.nextInt(10000));
@@ -286,7 +287,7 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void getStatusForOrder(){
-        Random rand = new Random();
+
 
         for (int i = 0; i<5; i++) {
             String chi = String.valueOf(rand.nextInt(10000));
@@ -302,7 +303,7 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void GetOrderNumbers(){
-        Random rand = new Random();
+
 
         for (int i = 0; i<5; i++) {
             String chi = String.valueOf(rand.nextInt(10000));
@@ -322,7 +323,7 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void changeItemQuantityForPickedFoodBox(){
-        Random rand = new Random();
+
 
         for (int i = 0; i<5; i++) {
             String chi = String.valueOf(rand.nextInt(10000));
@@ -350,7 +351,7 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void getItemQuantityForFoodbox() {
-        Random rand = new Random();
+
 
         for (int i = 0; i < 5; i++) {
             String chi = String.valueOf(rand.nextInt(10000));
@@ -375,7 +376,7 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void getItemNameForFoodBox(){
-        Random rand = new Random();
+
 
         for (int i = 0; i < 5; i++) {
             String chi = String.valueOf(rand.nextInt(10000));
@@ -402,7 +403,7 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void getItemIdsForFoodBox(){
-        Random rand = new Random();
+
 
         for (int i = 0; i < 5; i++) {
             String chi = String.valueOf(rand.nextInt(10000));
@@ -437,7 +438,7 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void getItemsNumberForFoodBox(){
-        Random rand = new Random();
+
         for (int i = 0; i < 5; i++) {
             String chi = String.valueOf(rand.nextInt(10000));
             client.registerShieldingIndividual(chi);
@@ -457,7 +458,7 @@ public class ShieldingIndividualClientImpTest {
 
     @Test
     public void getDietaryPreferenceForFoodBox(){
-        Random rand = new Random();
+
         for (int i = 0; i < 5; i++) {
             String chi = String.valueOf(rand.nextInt(10000));
             client.registerShieldingIndividual(chi);
